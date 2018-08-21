@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="errorBlockColor">#FF69B4</color>
+    <color name="errorPathColor">#FFC0CB</color>
+
+    <color name="idelBlockColor">#F8F8FF</color>
+    <color name="sideBlockColor">#00BFFF</color>
+    <color name="pathBlockkColor">#5500BFFF</color>
+    <color name="idelshapeColor">#778899</color>
+
+    <color name="codeBgColor">#998899</color>
+    <color name="shapeColor">#F8F8FF</color>
+    <color name="black">#FF000000</color>
+    <color name="tansparent">#00000000</color>
+
+    <color name="greenArrow">#00FF7F</color>
+</resources>
