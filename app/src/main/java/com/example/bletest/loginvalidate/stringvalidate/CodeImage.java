@@ -81,7 +81,7 @@ public class CodeImage extends View {
 
             mWidth=widthSize;
         }else {
-            mWidth= (mBounds.width()+getPaddingLeft()+getPaddingRight());
+            mWidth= (mBounds.width()+getPaddingLeft()+getPaddingRight())+mBounds.height();
         }
         setMeasuredDimension(mWidth, mHeight);
     }
