@@ -215,8 +215,11 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         paint=null;
+        shadow.recycle();
+        shadow=null;
         destroyDrawingCache();//释放缓存占用的资源
         gapBitmap.recycle();
+        gapBitmap=null;
     }
 
     @Override

@@ -231,6 +231,7 @@ public class PicValidateView extends View{
                 int currentValue = (Integer) animation.getAnimatedValue();
                 if (currentValue==0){
                     status=IDEL;
+                    hidenImage();
                 }else {
                     status=BACKTO;
                 }
