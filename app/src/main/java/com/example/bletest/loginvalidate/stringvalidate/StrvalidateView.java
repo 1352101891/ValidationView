@@ -124,4 +124,9 @@ public class StrvalidateView extends LinearLayout{
         super.onAttachedToWindow();
         Log.e(TAG,"onAttachedToWindow");
     }
+    //刷新状态，包括重新解锁
+    public void refresh(){
+        codeEditText.setText("");
+        validateImage.changeCode();
+    }
 }

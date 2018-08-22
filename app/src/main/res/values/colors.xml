@@ -16,7 +16,7 @@
     <color name="shapeColor">#F8F8FF</color>
     <color name="black">#FF000000</color>
     <color name="tansparent">#00000000</color>
-    <color name="lighttransparent">#55FFFFFF</color>
+    <color name="lighttransparent">#33FFFFFF</color>
 
     <color name="greenArrow">#00FF7F</color>
 </resources>

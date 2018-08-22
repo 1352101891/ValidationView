@@ -2,14 +2,10 @@ package com.example.bletest.loginvalidate.shape;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import com.example.bletest.R;
 import com.example.bletest.loginvalidate.picturevalidate.PicValidateView;
-
 import static com.example.bletest.loginvalidate.picturevalidate.PicValidateView.IDEL;
 import static com.example.bletest.loginvalidate.picturevalidate.PicValidateView.SUCCESS;
 

@@ -311,4 +311,11 @@ public class PicValidateView extends View{
     public void setResultCallback(ResultCallback resultCallback) {
         this.resultCallback = resultCallback;
     }
+    //刷新状态，包括重新解锁
+    public void refresh(){
+        Init(null);
+        baseShapes.clear();
+        InitShape();
+        invalidate();
+    }
 }
