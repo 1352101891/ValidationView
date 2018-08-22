@@ -7,6 +7,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import com.example.bletest.R;
 import com.example.bletest.loginvalidate.picturevalidate.PicValidateView;
 
 import static com.example.bletest.loginvalidate.picturevalidate.PicValidateView.IDEL;
@@ -31,10 +32,9 @@ public class LightShape  extends BaseShape {
 
     @Override
     public void Init() {
-        mPath=new Path();
         mPaint=new Paint();
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(mContext.getResources().getColor(R.color.lighttransparent));
         InitPath();
         middle();
     }
@@ -66,6 +66,8 @@ public class LightShape  extends BaseShape {
     }
 
     public void InitPath(){
+        //path复用之前一定要清空，要不然之前保留的路径都会绘制都canvas上
+        mPath=new Path();
         mPath.moveTo(mPoints[0]+totalx,mPoints[1]);
         for (int i=2;i<mPoints.length;i=i+2){
             mPath.lineTo(mPoints[i]+totalx,mPoints[i+1]);

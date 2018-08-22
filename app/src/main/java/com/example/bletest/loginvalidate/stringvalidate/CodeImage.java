@@ -104,8 +104,7 @@ public class CodeImage extends View {
 
 
         if (path!=null) {
-            mPaint.setARGB(255, random.nextInt(255), random.nextInt(255),
-                    random.nextInt(255));
+            mPaint.setARGB(argb[0],argb[1],argb[2],argb[3]);
             mPaint.setStrokeWidth(5);
             mPaint.setStyle(Paint.Style.STROKE);
             canvas.drawPath(path, mPaint);
@@ -138,13 +137,21 @@ public class CodeImage extends View {
         invalidate();
     }
 
+    int[] argb=new int[4];
     public void InitPath(){
-        float w=getMeasuredWidth()/5;
         path=new Path();
+        float w=getMeasuredWidth()/5;
         path.moveTo( w*random.nextFloat() ,rh());
         path.lineTo( w+w*random.nextFloat() ,rh());
         path.lineTo( 2*w+w*random.nextFloat(),rh());
         path.lineTo( 3*w+w*random.nextFloat() ,rh());
         path.lineTo( 4*w+w*random.nextFloat() ,rh());
+
+        //保存颜色避免在弹出键盘的时候measure，layout导致颜色改变
+        argb[0]=255;
+        argb[1]=random.nextInt(255);
+        argb[2]=random.nextInt(255);
+        argb[3]=random.nextInt(255);
     }
+
 }

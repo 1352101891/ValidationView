@@ -3,37 +3,26 @@ package com.example.bletest.loginvalidate.picturevalidate;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.CornerPathEffect;
-
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
-
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
-
 import com.example.bletest.loginvalidate.callback.AnimationEndCallback;
 import com.example.bletest.loginvalidate.callback.MoveCallback;
 import com.example.bletest.loginvalidate.shape.GapShape;
 import com.example.bletest.loginvalidate.shape.LightShape;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import static com.example.bletest.loginvalidate.picturevalidate.PicValidateView.IDEL;
 import static com.example.bletest.loginvalidate.picturevalidate.PicValidateView.SUCCESS;
 
@@ -51,7 +40,7 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
     public static int per=25;
     private LightShape lightShape;
     private boolean isSuccessAnimate=false;
-    private int duringTime=2000;
+    private int duringTime=1000;
     private int gapWidth,gapHeight;
     private AnimationEndCallback callback;
 
@@ -115,6 +104,10 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        //清除旧像素
+//        if(PicValidateView.validateStatue==SUCCESS)
+//            canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+
         //创建滑块图片
         createBlockBitmap();
         //绘制空缺阴影
