@@ -1,20 +1,15 @@
 package com.example.bletest.loginvalidate.picturevalidate;
 
-import android.content.Context;
-import android.graphics.Color;
+import android.content.Context;;
 import android.graphics.PixelFormat;
-import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.example.bletest.R;
+import com.example.bletest.loginvalidate.callback.AnimationEndCallback;
 import com.example.bletest.loginvalidate.callback.MoveCallback;
-
 import static com.example.bletest.loginvalidate.Util.dp2px;
+import static com.example.bletest.loginvalidate.Util.getStatueHeight;
 
 public class ImageFloatView implements MoveCallback {
     Context mContext;
@@ -32,7 +27,7 @@ public class ImageFloatView implements MoveCallback {
 
     public void InitView(int positionX,int positionY){
 
-        int height=dp2px(mContext,300);
+        int height=dp2px(mContext,200);
 
         //创建WindowManager的布局参数对象
         params = new WindowManager.LayoutParams(
@@ -44,9 +39,10 @@ public class ImageFloatView implements MoveCallback {
 
         params.gravity = Gravity.TOP| Gravity.START;
         params.x = positionX;
-        params.y = positionY-height-50;
-        PX=positionX;
-        PY=positionY-height-50;
+        //wm设置窗口的位置，不包括状态栏区域，所以设置高度要减去状态栏的高度，要不然会和预想的偏下
+        params.y = positionY-height-getStatueHeight(mContext);
+        PX= params.x;
+        PY= params.y;
         //创建一个View
         gapImageview = new GapImageview(mContext);
         gapImageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -59,6 +55,16 @@ public class ImageFloatView implements MoveCallback {
         }
         wm.removeViewImmediate(gapImageview);
         attach=false;
+    }
+
+    public void success(){
+        gapImageview.setCallback(new AnimationEndCallback() {
+            @Override
+            public void End() {
+                remove();
+            }
+        });
+        gapImageview.startAnimation();
     }
 
     public void add(){

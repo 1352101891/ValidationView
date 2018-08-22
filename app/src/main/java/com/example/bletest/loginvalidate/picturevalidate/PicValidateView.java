@@ -26,7 +26,6 @@ import java.util.ArrayList;
 public class PicValidateView extends View{
 
     private String TAG="PicValidateView";
-    public static int BlockTouchColor=0x1E90FF00;
     private String bgTips="向右滑动填充图片解锁";
     public int tipColor= 0x77889900;
     private int tipSize= 45;
@@ -87,6 +86,7 @@ public class PicValidateView extends View{
                 PicValidateView.this.setMoveCallback(floatView);
                 position = new int[2];
                 PicValidateView.this.getLocationInWindow(position);
+                int height=PicValidateView.this.getMeasuredHeight();
                 PicValidateView.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 floatView.InitView(position[0],position[1]);
             }
@@ -95,6 +95,10 @@ public class PicValidateView extends View{
 
     private void hidenImage(){
         floatView.remove();
+    }
+
+    private void successImage(){
+        floatView.success();
     }
 
     private void showImage(){
@@ -183,7 +187,7 @@ public class PicValidateView extends View{
                         validateStatue=SUCCESS;
                         status = IDEL;
                         resultCallback.Success("成功！");
-                        hidenImage();
+                        successImage();
                     }
                 }
                 if (catchBlock && validateStatue!=SUCCESS) {
@@ -292,6 +296,12 @@ public class PicValidateView extends View{
             baseShapes.add(new ArrowShape(darrowPoint, mWidth, mHeight, getContext()));
             baseShapes.add(new BlockShape(arrowPoint, mWidth, mHeight, getContext()));
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        baseShapes.clear();
     }
 
     public void setMoveCallback(MoveCallback moveCallback) {

@@ -1,5 +1,6 @@
 package com.example.bletest.loginvalidate.picturevalidate;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 
@@ -20,14 +21,21 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
+import com.example.bletest.loginvalidate.callback.AnimationEndCallback;
 import com.example.bletest.loginvalidate.callback.MoveCallback;
 import com.example.bletest.loginvalidate.shape.GapShape;
+import com.example.bletest.loginvalidate.shape.LightShape;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static com.example.bletest.loginvalidate.picturevalidate.PicValidateView.IDEL;
+import static com.example.bletest.loginvalidate.picturevalidate.PicValidateView.SUCCESS;
 
 
 public class GapImageview  extends android.support.v7.widget.AppCompatImageView implements MoveCallback {
@@ -38,9 +46,14 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
     private Bitmap shadow;
     private int mWidth,mHeight;
     private String TAG="GapImageView";
-    private int startX=0,startY=400;
-    private int shadowX=500,shadowY=400;
+    private int startX=0,startY=200;
+    private int shadowX=500,shadowY=200;
     public static int per=25;
+    private LightShape lightShape;
+    private boolean isSuccessAnimate=false;
+    private int duringTime=2000;
+    private int gapWidth,gapHeight;
+    private AnimationEndCallback callback;
 
     public GapImageview(Context context) {
         super(context);
@@ -61,12 +74,14 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        mWidth= MeasureSpec.getSize(widthMeasureSpec);
+        mWidth = MeasureSpec.getSize(widthMeasureSpec);
         mHeight = MeasureSpec.getSize(heightMeasureSpec);
+        InitShape();
     }
 
     private Paint mMaskShadowPaint,mMaskPaint;
     private void Init(){
+
         //滑块区域
         mPorterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
         // 实例化阴影画笔
@@ -82,15 +97,20 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
         paint.setAntiAlias(true);
         setDrawingCacheEnabled(true);//设置能否缓存图片信息（drawing cache）
         buildDrawingCache();//如果能够缓存图片，则创建图片缓存
-        InitGapPoints();
+
     }
 
-
-    public void InitGapPoints(){
-        int[] p=new int[]{0,1,0,2,0,3,0,4,1,4,2,4,3,4,3,3,3,2,3,1,2,1,1,1};
-        shape=new GapShape(getContext(),p);
-        shape.offset(shadowX,startY);
+    public void InitShape(){
+        if (lightShape == null) {
+            lightShape = new LightShape(getContext(), mWidth, mHeight);
+        }
+        if (shape==null){
+            int[] p=new int[]{0,1,0,2,0,3,0,4,1,4,2,4,3,4,3,3,3,2,3,1,2,1,1,1};
+            shape=new GapShape(getContext(),p);
+            shape.offset(shadowX,shadowY);
+        }
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -111,6 +131,10 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
             canvas.drawBitmap(gapBitmap, startX, startY, paint);
         }
 
+        //成功后绘制流光
+        if(PicValidateView.validateStatue==SUCCESS){
+            lightShape.drawShap(canvas,IDEL);
+        }
     }
 
     private synchronized void createBlockBitmap() {
@@ -119,7 +143,7 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
         }
 
         //滑块阴影
-        Path mPath=createMaskPath();
+        Path mPath=createMaskPath(0,0);
         Bitmap temp = getMaskBitmap( getDrawingCache(), mPath);
         if (shadow==null){
             shadow=temp.extractAlpha();
@@ -133,7 +157,7 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
             return gapBitmap;
         }
         //以控件宽高 create一块bitmap
-        Bitmap tempBitmap = Bitmap.createBitmap(gapWidth, gapWidth, Bitmap.Config.ARGB_8888);
+        Bitmap tempBitmap = Bitmap.createBitmap(gapWidth, gapHeight, Bitmap.Config.ARGB_8888);
         Log.e(TAG, " getMaskBitmap: width:" + mBitmap.getWidth() + ",  height:" + mBitmap.getHeight());
         Log.e(TAG, " View: width:" + mWidth + ",  height:" + mHeight);
         //把创建的bitmap作为画板
@@ -147,7 +171,8 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
         //设置遮罩模式(图像混合模式)
         mMaskPaint.setXfermode(mPorterDuffXfermode);
         //★考虑到scaleType等因素，要用Matrix对Bitmap进行缩放
-        mCanvas.drawBitmap(mBitmap,new Rect(shadowX,shadowY,shadowX+4*per, shadowX+per*4),new Rect(0,0,gapWidth,gapHeight),mMaskPaint);
+        mCanvas.drawBitmap(mBitmap,new Rect(shadowX,shadowY,shadowX+gapWidth , shadowY+gapHeight),new Rect(0,0,gapWidth,gapHeight),mMaskPaint);
+
         mMaskPaint.setXfermode(null);
         return tempBitmap;
     }
@@ -178,14 +203,13 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
     }
 
 
-    private int gapWidth,gapHeight;
-    public Path createMaskPath(){
+    public Path createMaskPath(int offsetX,int offsetY){
         int[] gapPoint=new int[]{0,1,0,2,0,3,0,4,1,4,2,4,3,4,3,3,3,2,3,1,2,1,1,1};
         for(int i=0;i<gapPoint.length;i=i+2){
-            gapPoint[i]= gapPoint[i]*per ; //+  shadowX
-            gapPoint[i+1]= gapPoint[i+1]*per; //+  shadowY
+            gapPoint[i]= gapPoint[i]*per +offsetX; //+  shadowX
+            gapPoint[i+1]= gapPoint[i+1]*per +offsetY; //+  shadowY
         }
-        gapHeight=gapWidth=gapPoint[12]+per;
+        gapHeight=gapWidth=gapPoint[7]+per -gapPoint[1];
 
 
         Path mPath=new Path();
@@ -220,6 +244,8 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
         destroyDrawingCache();//释放缓存占用的资源
         gapBitmap.recycle();
         gapBitmap=null;
+        lightShape=null;
+        shape=null;
     }
 
     @Override
@@ -229,4 +255,45 @@ public class GapImageview  extends android.support.v7.widget.AppCompatImageView 
         }
         invalidate();
     }
+
+
+    public void startAnimation(){
+        if (isSuccessAnimate){
+            return;
+        }
+        isSuccessAnimate=true;
+        // 步骤1：设置动画属性的初始值 & 结束值
+        ValueAnimator anim = ValueAnimator.ofInt( 0, mWidth);
+        anim.setInterpolator(new LinearInterpolator());
+        // 步骤2：设置动画的播放各种属性
+        anim.setDuration(duringTime);
+        // 设置动画运行的时长
+        anim.setRepeatCount(0);
+        // 步骤3：将改变的值手动赋值给对象的属性值：通过动画的更新监听器
+        // 设置 值的更新监听器
+        // 即：值每次改变、变化一次,该方法就会被调用一次
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int currentValue = (Integer) animation.getAnimatedValue();
+                if (currentValue== mWidth){
+                    isSuccessAnimate=false;
+                    if (callback!=null){
+                        callback.End();
+                    }
+                }
+                if (lightShape!=null) {
+                    lightShape.offset(currentValue, 0);
+                    invalidate();
+                }
+            }
+        });
+        anim.start();
+    }
+
+
+    public void setCallback(AnimationEndCallback callback) {
+        this.callback = callback;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.bletest.loginvalidate.stringvalidate;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -13,6 +14,8 @@ import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.bletest.R;
 import com.example.bletest.loginvalidate.Util;
 
 public class StrvalidateView extends LinearLayout{
@@ -49,14 +52,17 @@ public class StrvalidateView extends LinearLayout{
 
         title=new TextView(getContext());
         title.setText("验证码");
-        title.setTextSize(Util.dp2px(getContext(),10));
+        title.setTextSize(20);
+        title.setTextColor(getResources().getColor(R.color.g_font_black));
         title.setGravity(Gravity.CENTER);
-        title.setPadding(px,px,px,px);
+        title.setPadding(3*px,px,px,px);
         title.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         this.addView(title);
 
 
         codeEditText=new EditText(getContext());
+        codeEditText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+        codeEditText.setBackground(null);
         codeEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         codeEditText.setInputType( InputType.TYPE_CLASS_NUMBER);
         codeEditParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -64,6 +70,7 @@ public class StrvalidateView extends LinearLayout{
         this.addView(codeEditText);
 
         LinearLayout.LayoutParams imageParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);;
+        imageParams.setMargins(px,0,0,0);
         validateImage = new CodeImage(getContext());
         validateImage.setLayoutParams(imageParams);
         validateImage.setOnClickListener(new OnClickListener() {
@@ -90,7 +97,14 @@ public class StrvalidateView extends LinearLayout{
                 size1[0]=title.getMeasuredWidth();
                 size1[1]=title.getMeasuredHeight();
 
-                codeEditParams.width = getMeasuredWidth() -size[0]-size1[0]-2*px;
+
+                View part=new View(getContext());
+                part.setBackgroundColor(getResources().getColor(R.color.g_list_separator_light));
+                LinearLayout.LayoutParams partParams=new LayoutParams(2, (int) ((getMeasuredHeight())*0.8));
+                part.setLayoutParams(partParams);
+                StrvalidateView.this.addView(part,2);
+
+                codeEditParams.width = getMeasuredWidth() -size[0]-size1[0]-3*px;
                 codeEditText.setLayoutParams(codeEditParams);
             }
         });

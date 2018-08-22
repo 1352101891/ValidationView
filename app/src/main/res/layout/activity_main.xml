@@ -9,13 +9,13 @@
 
     <com.example.bletest.loginvalidate.stringvalidate.StrvalidateView
         android:id="@+id/strvalidateView"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.example.bletest.loginvalidate.stringvalidate.StrvalidateView>
+        android:layout_height="wrap_content" />
 
 
     <com.example.bletest.loginvalidate.picturevalidate.PicValidateView
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="600px"
         android:id="@+id/validateview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

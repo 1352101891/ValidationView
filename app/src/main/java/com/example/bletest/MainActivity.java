@@ -3,22 +3,15 @@ package com.example.bletest;
 
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import com.example.bletest.loginvalidate.callback.ResultCallback;
-import com.example.bletest.loginvalidate.picturevalidate.GapImageview;
-import com.example.bletest.loginvalidate.picturevalidate.ImageFloatView;
 import com.example.bletest.loginvalidate.picturevalidate.PicValidateView;
-import com.example.bletest.util.BleHelper;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,12 +38,6 @@ public class MainActivity extends AppCompatActivity {
         InitOthers();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        // TODO Auto-generated method stub
-        super.onConfigurationChanged(newConfig);
-        Log.i(TAG, "onConfigurationChanged : " );
-    }
 
     public void InitOthers(){
 
@@ -94,4 +81,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO Auto-generated method stub
+        super.onConfigurationChanged(newConfig);
+        Log.i(TAG, "onConfigurationChanged : " );
+    }
 }
